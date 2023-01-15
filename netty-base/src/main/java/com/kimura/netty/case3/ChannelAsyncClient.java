@@ -10,6 +10,7 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.string.StringEncoder;
 import io.netty.handler.logging.LoggingHandler;
+import java.util.Scanner;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.InetSocketAddress;
@@ -33,11 +34,25 @@ public class ChannelAsyncClient {
                         ch.pipeline().addLast(new StringEncoder());
                     }
                 }).connect(new InetSocketAddress("localhost",8080));
-
+        Scanner scanner=new Scanner(System.in);
         //使用异步监听,因为GenericFutureListener就一个抽象方法，可以用lambda表达式
         channelFuture.addListener((ChannelFutureListener) future -> {
             Channel channel = future.channel();
-            new Thread(()->{},"async-write").start();
+            new Thread(()->{
+                while(true){
+                    String msg=scanner.next();
+                    if("quit".equals(msg)){
+                        channel.close();
+                        log.info("关闭channel");
+                        break;
+                    }
+                    channel.writeAndFlush(msg);
+                }
+            },"async-write").start();
+            ChannelFuture closeFuture=channel.closeFuture();
+            closeFuture.addListener(close->{
+               group.shutdownGracefully();
+            });
         });
     }
 }
