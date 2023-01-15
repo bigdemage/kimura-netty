@@ -22,6 +22,5 @@ public class HelloClient {
             .sync()//阻塞同步，直到连接建立
             .channel()//拿到连接channel
             .writeAndFlush("hello");
-
     }
 }
