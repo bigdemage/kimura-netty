@@ -13,10 +13,10 @@ public class ByteLog {
         int length = buffer.readableBytes();
         int rows = length / 16 + (length % 15 == 0 ? 0 : 1) + 4;
         StringBuilder buf = new StringBuilder(rows * 80 * 2)
-                .append("read index:").append(buffer.readerIndex())
-                .append(" write index:").append(buffer.writerIndex())
-                .append(" capacity:").append(buffer.capacity())
-                .append(NEWLINE);
+            .append("read index:").append(buffer.readerIndex())
+            .append(" write index:").append(buffer.writerIndex())
+            .append(" capacity:").append(buffer.capacity())
+            .append(NEWLINE);
         appendPrettyHexDump(buf, buffer);
         System.out.println(buf.toString());
     }

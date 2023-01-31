@@ -9,7 +9,7 @@ import java.net.InetSocketAddress;
 
 public class HelloClient {
     public static void main(String[] args) throws InterruptedException {
-        Bootstrap bootstrap=new Bootstrap();
+        Bootstrap bootstrap = new Bootstrap();
         bootstrap.group(new NioEventLoopGroup());
         bootstrap.channel(NioSocketChannel.class);
         //处理器
@@ -18,7 +18,7 @@ public class HelloClient {
                 channel.pipeline().addLast(new StringEncoder());
             }
         });
-        bootstrap.connect(new InetSocketAddress("localhost",8080))
+        bootstrap.connect(new InetSocketAddress("localhost", 8080))
             .sync()//阻塞同步，直到连接建立
             .channel()//拿到连接channel
             .writeAndFlush("hello");

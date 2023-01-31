@@ -1,9 +1,7 @@
 package com.kimura.netty.case1;
 
-import io.netty.bootstrap.Bootstrap;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandler;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -17,7 +15,7 @@ import io.netty.handler.codec.string.StringDecoder;
 public class HelloServer {
 
     public static void main(String[] args) {
-        ServerBootstrap bootstrap=new ServerBootstrap();
+        ServerBootstrap bootstrap = new ServerBootstrap();
         //核心线程组-
         bootstrap.group(new NioEventLoopGroup());
         //管道
@@ -31,7 +29,7 @@ public class HelloServer {
                     //自定义事件
                     channel.pipeline().addLast(new ChannelInboundHandlerAdapter() {
                         @Override public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-                            System.out.println("读取消息："+msg);
+                            System.out.println("读取消息：" + msg);
                         }
                     });
                 }

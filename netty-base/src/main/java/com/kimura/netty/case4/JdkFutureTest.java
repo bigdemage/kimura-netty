@@ -13,9 +13,9 @@ import lombok.extern.slf4j.Slf4j;
 public class JdkFutureTest {
 
     public static void main(String[] args) throws Exception {
-        ExecutorService executor= Executors.newFixedThreadPool(2);
+        ExecutorService executor = Executors.newFixedThreadPool(2);
         //这里也可以用lambda表达式
-        Future future=executor.submit(new Callable<Integer>() {
+        Future future = executor.submit(new Callable<Integer>() {
             @Override public Integer call() throws Exception {
                 Thread.sleep(2000);
                 return 20;
@@ -24,6 +24,6 @@ public class JdkFutureTest {
 
         log.info("等待中....");
         //阻塞等待，直到获取结果
-        log.info("结果为:{}",future.get());
+        log.info("结果为:{}", future.get());
     }
 }
