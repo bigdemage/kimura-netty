@@ -1,4 +1,4 @@
-package com.kimura.netty.case6;
+package com.kimura.netty.util;
 
 import io.netty.buffer.ByteBuf;
 
