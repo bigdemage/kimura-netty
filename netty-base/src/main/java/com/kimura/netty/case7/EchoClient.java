@@ -8,6 +8,7 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
 import java.net.InetSocketAddress;
 import java.nio.charset.Charset;
@@ -34,7 +35,7 @@ public class EchoClient {
                         }
                     });
                 }
-            }).connect(new InetSocketAddress("127.0.0.1", 8080)).sync().channel();
+            }).connect(new InetSocketAddress("127.0.0.1", 8055)).sync().channel();
         channel.closeFuture().addListener(future -> {
             //优雅关闭
             group.shutdownGracefully();
