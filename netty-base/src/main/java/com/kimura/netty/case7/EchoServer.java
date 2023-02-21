@@ -1,5 +1,6 @@
 package com.kimura.netty.case7;
 
+import com.kimura.netty.case10.LifecycleHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -22,6 +23,7 @@ public class EchoServer {
             .channel(NioServerSocketChannel.class)
             .childHandler(new ChannelInitializer<NioSocketChannel>() {
                 @Override protected void initChannel(NioSocketChannel channel) throws Exception {
+                    channel.pipeline().addLast(new LifecycleHandler());
                     channel.pipeline().addLast(new ChannelInboundHandlerAdapter() {
                         @Override public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
                             ByteBuf byteBuf = (ByteBuf) msg;
