@@ -12,6 +12,8 @@ import io.netty.handler.timeout.IdleStateEvent;
 import io.netty.handler.timeout.IdleStateHandler;
 import lombok.extern.slf4j.Slf4j;
 
+import static com.kimura.netty.util.Constants.LOCAL_PORT;
+
 
 /**
  * 心跳检测机制
@@ -37,10 +39,10 @@ public class HeartBeatServer {
                      * @param writerIdleTimeSeconds--当在指定时间内没有数据写入到channel时，会出发WRITER_IDLE的IdleStateEvent事件
                      * @param allIdleTimeSeconds--指定时间内没有读写操作时，出发一个ALL_IDLE的IdleStateEvent事件
                      */
-                    ch.pipeline().addLast(new IdleStateHandler(3, 0, 0));
+                    ch.pipeline().addLast(new IdleStateHandler(5, 0, 0));
                     ch.pipeline().addLast(new HeartBeatServerHandler());
                 }
-            }).bind(8088).sync();
+            }).bind(LOCAL_PORT).sync();
             future.channel().closeFuture().sync();
         }finally {
             bossGroup.shutdownGracefully();
@@ -59,7 +61,7 @@ class HeartBeatServerHandler extends SimpleChannelInboundHandler<String> {
     int readIdleTimes=0;
 
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, String msg) throws Exception {
+    public void channelRead0(ChannelHandlerContext ctx, String msg) throws Exception {
         System.out.println(String.format("消息接收-%s",msg));
         if("ping".equals(msg)){
             ctx.channel().writeAndFlush("pong");

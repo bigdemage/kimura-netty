@@ -35,10 +35,11 @@ public class HeartBeatClient {
                     ch.pipeline().addLast(new HeartBeatClientHandler());
                 }
             });
-            Channel channel=bootstrap.connect(new InetSocketAddress("127.0.0.1",8088)).channel();
+            Channel channel=bootstrap.connect(new InetSocketAddress("127.0.0.1",8088)).sync().channel();
             Scanner scanner=new Scanner(System.in);
             while (channel.isActive()){
-                channel.writeAndFlush(scanner.nextLine());
+                String msg=scanner.nextLine();
+                channel.writeAndFlush(msg);
             }
         }catch (Exception e){
             e.printStackTrace();
