@@ -61,7 +61,8 @@ public class ReconnectionClient {
         ChannelFuture channelFuture = this.bootstrap.connect(new InetSocketAddress(ip,port));
         channelFuture.addListener((ChannelFutureListener) future -> {
             if(!future.isSuccess()){
-                //开始重连-3秒重连一次
+                //开始重连-3秒后重连一次
+                //如果想周期性执行，使用scheduleAtFixedRate，想取消的话通过futrue.cancel
                 future.channel().eventLoop().schedule(()->{
                     try {
                         connect();

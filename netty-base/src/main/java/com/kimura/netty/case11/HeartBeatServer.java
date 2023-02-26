@@ -36,8 +36,14 @@ public class HeartBeatServer {
              * 处理的，需要放到队列里，1024就是设置队列的长度
              */
             bootstrap.option(ChannelOption.SO_BACKLOG, 1024)
-                      //tcp级别的心跳检测
-                     .childOption(ChannelOption.SO_KEEPALIVE, true);
+            /**
+             * tcp级别的心跳检测
+             * 缺点：不是tcp的标准协议，默认是关闭的
+             *      机制依赖于操作系统的实现，默认心跳时间是2小时，修改的话需要系统调用配置，灵活性不够
+             *      与tcp协议板顶，如果更换udp或者其他协议，此机制就失效了
+             */
+
+                .childOption(ChannelOption.SO_KEEPALIVE, true);
             //childHandler是处理工作线程的，handler是处理boss链接类线程，netty已经处理好
             ChannelFuture future = bootstrap.childHandler(new ChannelInitializer<SocketChannel>() {
                 @Override
