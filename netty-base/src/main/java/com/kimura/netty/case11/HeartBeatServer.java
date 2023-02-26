@@ -17,6 +17,10 @@ import static com.kimura.netty.util.Constants.LOCAL_PORT;
 
 /**
  * 心跳检测机制
+ * netty是基于tcp协议开发的，在tcp协议实现中也停供了keepalive报文用来检测对端是否可用
+ * tcp keepAlive是用于检测链接的死活，而心跳检测机制是需要检测连接可不可用，检测双方的通讯状态是否存活
+ * 例如某台服务器因为某些原因导致负载过高，cpu100%，双方已经没法通讯了，但此时keepAlive是true
+ * 这就是典型的连接活着而业务提供方已经死掉的状态，对客户端而言，这时应该断连去连接其他服务器，而不是连接一台发不出消息的服务器
  */
 @Slf4j
 public class HeartBeatServer {
@@ -27,6 +31,13 @@ public class HeartBeatServer {
             ServerBootstrap bootstrap = new ServerBootstrap();
             bootstrap.group(bossGroup, workGroup);
             bootstrap.channel(NioServerSocketChannel.class);
+            /**
+             * SO_BACKLOG对应tcp/ip协议listen函数中的backlog参数，用来初始化服务端可连接的队列，服务端处理客户端连接请求是顺序处理的，多个连接过来时是不能同时
+             * 处理的，需要放到队列里，1024就是设置队列的长度
+             */
+            bootstrap.option(ChannelOption.SO_BACKLOG, 1024)
+                      //tcp级别的心跳检测
+                     .childOption(ChannelOption.SO_KEEPALIVE, true);
             //childHandler是处理工作线程的，handler是处理boss链接类线程，netty已经处理好
             ChannelFuture future = bootstrap.childHandler(new ChannelInitializer<SocketChannel>() {
                 @Override
@@ -44,7 +55,7 @@ public class HeartBeatServer {
                 }
             }).bind(LOCAL_PORT).sync();
             future.channel().closeFuture().sync();
-        }finally {
+        } finally {
             bossGroup.shutdownGracefully();
             workGroup.shutdownGracefully();
         }
@@ -58,14 +69,14 @@ public class HeartBeatServer {
 class HeartBeatServerHandler extends SimpleChannelInboundHandler<String> {
 
     //读取空闲次数
-    int readIdleTimes=0;
+    int readIdleTimes = 0;
 
     @Override
     public void channelRead0(ChannelHandlerContext ctx, String msg) throws Exception {
-        System.out.println(String.format("消息接收-%s",msg));
-        if("ping".equals(msg)){
+        System.out.println(String.format("消息接收-%s", msg));
+        if ("ping".equals(msg)) {
             ctx.channel().writeAndFlush("pong");
-        }else{
+        } else {
             System.out.println("业务处理中....");
         }
     }
@@ -73,15 +84,16 @@ class HeartBeatServerHandler extends SimpleChannelInboundHandler<String> {
 
     /**
      * 事件触发
+     *
      * @param ctx
      * @param evt
      * @throws Exception
      */
     @Override
     public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
-        IdleStateEvent idleStateEvent= (IdleStateEvent) evt;
+        IdleStateEvent idleStateEvent = (IdleStateEvent) evt;
         String eventType = null;
-        switch (idleStateEvent.state()){
+        switch (idleStateEvent.state()) {
             case READER_IDLE:
                 eventType = "读空闲";
                 readIdleTimes++; // 读空闲的计数加1
@@ -95,8 +107,8 @@ class HeartBeatServerHandler extends SimpleChannelInboundHandler<String> {
                 // 不处理
                 break;
         }
-        System.out.println("超时事件为---"+eventType);
-        if(readIdleTimes>3){
+        System.out.println("超时事件为---" + eventType);
+        if (readIdleTimes > 3) {
             System.out.println("已超时3次，关闭链接，释放资源");
             ctx.channel().writeAndFlush("readyClose");
             ctx.channel().close();
@@ -104,8 +116,8 @@ class HeartBeatServerHandler extends SimpleChannelInboundHandler<String> {
     }
 
     @Override
-    public void channelActive(ChannelHandlerContext ctx)  {
-        System.out.println(String.format("%s-已连接",ctx.channel().remoteAddress()));
+    public void channelActive(ChannelHandlerContext ctx) {
+        System.out.println(String.format("%s-已连接", ctx.channel().remoteAddress()));
     }
 }
 
