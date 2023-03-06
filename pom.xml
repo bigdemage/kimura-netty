@@ -9,6 +9,7 @@
   <version>1.0-SNAPSHOT</version>
   <modules>
     <module>netty-base</module>
+      <module>simple-rpc</module>
   </modules>
   <packaging>pom</packaging>
   <name>netty-parent</name>
