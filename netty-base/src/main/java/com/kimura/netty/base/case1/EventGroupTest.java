@@ -2,8 +2,10 @@ package com.kimura.netty.base.case1;
 
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
-import java.util.concurrent.TimeUnit;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.concurrent.TimeUnit;
+
 
 @Slf4j
 public class EventGroupTest {
