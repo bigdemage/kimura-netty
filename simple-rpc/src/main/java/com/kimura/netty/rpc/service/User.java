@@ -1,10 +1,19 @@
 package com.kimura.netty.rpc.service;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.io.Serializable;
 
 @Data
-public class User {
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class User implements Serializable {
 
+    private static final long serialVersionUID = 5715079556571222697L;
     private String name;
-    private String age;
+    private Integer age;
 }
