@@ -18,7 +18,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getByName(String name) {
+    public User getByName(String name)
+    {
         return users.get(name);
     }
 }
