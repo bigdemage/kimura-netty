@@ -1,4 +1,4 @@
-package com.kimura.netty.rpc.service;
+package com.kimura.netty.rpc.pojo;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

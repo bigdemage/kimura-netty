@@ -1,6 +1,6 @@
 package com.kimura.netty.rpc.service.impl;
 
-import com.kimura.netty.rpc.service.User;
+import com.kimura.netty.rpc.pojo.User;
 import com.kimura.netty.rpc.service.UserService;
 
 import java.util.concurrent.ConcurrentHashMap;
