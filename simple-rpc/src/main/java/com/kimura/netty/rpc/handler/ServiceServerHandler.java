@@ -30,5 +30,6 @@ public class ServiceServerHandler extends ChannelInboundHandlerAdapter {
         Method method=clazz.getMethod(methodName,list.toArray(new Class[list.size()]));
         Object response=method.invoke(instance,params);
         log.info("调用输出结果:{}",response);
+        ctx.channel().writeAndFlush(JSONObject.toJSONString(response));
     }
 }

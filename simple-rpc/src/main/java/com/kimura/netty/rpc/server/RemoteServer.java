@@ -11,6 +11,7 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.string.StringDecoder;
+import io.netty.handler.codec.string.StringEncoder;
 
 /**
  * rpc服务端
@@ -28,6 +29,7 @@ public class RemoteServer {
             @Override
             protected void initChannel(SocketChannel ch) throws Exception {
                 ch.pipeline().addLast(new StringDecoder());
+                ch.pipeline().addLast(new StringEncoder());
                 ch.pipeline().addLast(new ServiceServerHandler());
             }
         }).bind(8085).sync();
