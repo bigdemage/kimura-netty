@@ -12,6 +12,8 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.string.StringDecoder;
 import lombok.extern.slf4j.Slf4j;
 
+import static com.kimura.netty.base.util.Constants.LOCAL_PORT;
+
 /**
  * 更加细化的eventLoop
  */
@@ -51,7 +53,7 @@ public class EventLoopServer {
                     });
                 }
             })
-            .bind(8080).sync();
+            .bind(LOCAL_PORT).sync();
 
     }
 }

@@ -9,6 +9,8 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.string.StringDecoder;
 
+import static com.kimura.netty.base.util.Constants.LOCAL_PORT;
+
 /**
  * 服务端
  */
@@ -35,6 +37,6 @@ public class HelloServer {
                 }
             }
         );
-        bootstrap.bind(8080);
+        bootstrap.bind(LOCAL_PORT);
     }
 }
