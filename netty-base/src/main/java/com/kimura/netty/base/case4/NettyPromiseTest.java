@@ -21,7 +21,7 @@ public class NettyPromiseTest {
             try {
                 log.info("计算中....");
                 Thread.sleep(2000);
-                int i = 1 / 0;
+                int i = 1 / 2;
                 promise.setSuccess(100);
             } catch (InterruptedException e) {
                 promise.setFailure(e);

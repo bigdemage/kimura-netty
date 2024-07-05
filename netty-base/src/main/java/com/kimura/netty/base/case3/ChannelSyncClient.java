@@ -13,6 +13,9 @@ import java.net.InetSocketAddress;
 import java.util.Scanner;
 import lombok.extern.slf4j.Slf4j;
 
+import static com.kimura.netty.base.util.Constants.LOCAL_IP;
+import static com.kimura.netty.base.util.Constants.LOCAL_PORT;
+
 /**
  * 同步阻塞式关闭channel和group
  */
@@ -31,7 +34,7 @@ public class ChannelSyncClient {
                 }
             })
             //这里都是异步连接的，所以需要sync或者监听，不然拿到的channel可能都还没有创建出来
-            .connect(new InetSocketAddress("127.0.0.1", 8080));
+            .connect(new InetSocketAddress(LOCAL_IP, LOCAL_PORT));
         //同步阻塞，等connet建立
         channelFuture.sync();
         Channel channel = channelFuture.channel();

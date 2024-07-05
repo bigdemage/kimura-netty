@@ -13,6 +13,7 @@
         <module>netty-source</module>
         <module>netty-tomcat</module>
         <module>bo-tomcat</module>
+        <module>netty-test</module>
     </modules>
     <packaging>pom</packaging>
     <name>netty-parent</name>

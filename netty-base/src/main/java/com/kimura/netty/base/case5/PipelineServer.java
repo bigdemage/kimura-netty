@@ -12,6 +12,8 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.string.StringDecoder;
 import lombok.extern.slf4j.Slf4j;
 
+import static com.kimura.netty.base.util.Constants.LOCAL_PORT;
+
 /**
  * 管道的作用
  */
@@ -87,7 +89,7 @@ public class PipelineServer {
                         }
                     });
                 }
-            }).bind(8080);
+            }).bind(LOCAL_PORT);
     }
 }
 

@@ -1,5 +1,7 @@
 package com.kimura.netty.base.case9;
 
+import com.alibaba.fastjson.JSONObject;
+import com.kimura.netty.base.case10.LifecycleHandler;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.channel.embedded.EmbeddedChannel;
@@ -7,6 +9,9 @@ import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 public class MessageProtocolTest {
@@ -24,6 +29,7 @@ public class MessageProtocolTest {
         em.pipeline().addLast(new LengthFieldBasedFrameDecoder(1024,8,4,0,0));
         em.pipeline().addLast(new LoggingHandler(LogLevel.DEBUG));
         em.pipeline().addLast(new MessageProtocol());
+        em.pipeline().addLast(new LifecycleHandler());
 
         UserMessage userMessage=UserMessage.builder().name("kimura").age(20).build();
         ByteBuf byteBuf=ByteBufAllocator.DEFAULT.buffer();
@@ -32,7 +38,12 @@ public class MessageProtocolTest {
         ByteBuf b1=byteBuf.slice(0,50);
         ByteBuf b2=byteBuf.slice(50,byteBuf.readableBytes()-50);
 
+        List<Object> list=new ArrayList<>();
+        new MessageProtocol().decode(null,byteBuf,list);
+
         em.writeInbound(b1);
+
+
 
     }
 }

@@ -13,6 +13,9 @@ import java.net.InetSocketAddress;
 import java.util.Scanner;
 import lombok.extern.slf4j.Slf4j;
 
+import static com.kimura.netty.base.util.Constants.LOCAL_IP;
+import static com.kimura.netty.base.util.Constants.LOCAL_PORT;
+
 /**
  * channel使用异步等待建立连接，异步优雅关闭
  */
@@ -30,7 +33,7 @@ public class ChannelAsyncClient {
                     ch.pipeline().addLast(new LoggingHandler());
                     ch.pipeline().addLast(new StringEncoder());
                 }
-            }).connect(new InetSocketAddress("localhost", 8080));
+            }).connect(new InetSocketAddress(LOCAL_IP, LOCAL_PORT));
         Scanner scanner = new Scanner(System.in);
         //使用异步监听,因为GenericFutureListener就一个抽象方法，可以用lambda表达式
         channelFuture.addListener((ChannelFutureListener) future -> {
